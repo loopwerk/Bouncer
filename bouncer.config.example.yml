@@ -1,0 +1,25 @@
+# Copy to bouncer.config.yml, or point the BOUNCER_CONFIG environment variable at your config file.
+# Every setting can also be set with an environment variable (see the README); those take precedence.
+
+# Your Umami server. Bouncer serves its /script.js and forwards events to its /api/send.
+upstream: https://umami.example.com
+
+# Header holding the visitor IP. Leave out when browsers connect to Bouncer directly.
+# Behind Cloudflare: CF-Connecting-IP. Behind a reverse proxy: usually X-Forwarded-For or X-Real-IP.
+ip_header: CF-Connecting-IP
+
+filters:
+  automated_browsers: true # tracker doesn't run in Selenium, Playwright, Puppeteer, etc.
+  datacenter_ips: true # drop datacenter/hosting IPs
+  vpn_ips: false # drop known VPN IPs too
+  ua_bot_detection: true # isbot + Matomo device-detector
+  referrer_spam: true # Matomo referrer spam list
+  header_anomalies: true # missing User-Agent or Accept-Language
+  origin_mismatch: true # missing Origin, or one from another site
+
+server:
+  port: 3100
+  host: 0.0.0.0
+
+# info logs every dropped and passed event; warn logs only problems; error logs only failures.
+log_level: info
