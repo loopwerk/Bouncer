@@ -25,6 +25,8 @@ export type AppDeps = {
 export function createApp({ config, filters, scriptCache, fetch, upstreamTimeoutMs, remoteAddress, log }: AppDeps): Hono {
   const app = new Hono();
 
+  app.get("/", (c) => c.text("OK"));
+
   app.get(SCRIPT_PATH, async (c) => {
     try {
       const script = await scriptCache.get();
