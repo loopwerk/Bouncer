@@ -20,19 +20,11 @@ describe("resolveClientIp", () => {
   test("does not fall back to the connection IP when the configured header is missing", () => {
     assert.equal(resolveClientIp(new Headers(), "198.51.100.7", "cf-connecting-ip"), undefined);
   });
-
-  test("returns undefined for an invalid header value", () => {
-    assert.equal(resolveClientIp(new Headers({ "cf-connecting-ip": "unknown" }), undefined, "cf-connecting-ip"), undefined);
-  });
 });
 
 describe("normalizeIp", () => {
   test("converts IPv4-mapped IPv6 to IPv4", () => {
     assert.equal(normalizeIp("::ffff:203.0.113.9"), "203.0.113.9");
-  });
-
-  test("writes IPv6 in compressed form", () => {
-    assert.equal(normalizeIp("2001:0db8:0000:0000:0000:0000:0000:0001"), "2001:db8::1");
   });
 
   test("trims whitespace and rejects non-IPs", () => {

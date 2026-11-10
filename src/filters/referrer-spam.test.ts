@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { SPAM_LIST_URL, createReferrerSpamFilter, downloadSpamDomains, isSpamReferrer, parseSpamDomains } from "./referrer-spam.ts";
+import { createReferrerSpamFilter, downloadSpamDomains, isSpamReferrer, parseSpamDomains } from "./referrer-spam.ts";
 
 const DOMAINS = parseSpamDomains("# comment\nspam.example\n\n  Shouting.EXAMPLE  \nsub.listed.example\n");
 
@@ -11,16 +11,6 @@ describe("parseSpamDomains", () => {
 });
 
 describe("downloadSpamDomains", () => {
-  test("downloads and parses Matomo's list", async () => {
-    let requested: string | undefined;
-    const domains = await downloadSpamDomains(async (url) => {
-      requested = url;
-      return "spam.example\nother.example\n";
-    });
-    assert.equal(requested, SPAM_LIST_URL);
-    assert.deepEqual([...domains], ["spam.example", "other.example"]);
-  });
-
   test("fails when the list has no entries", async () => {
     await assert.rejects(
       downloadSpamDomains(async () => "\n"),

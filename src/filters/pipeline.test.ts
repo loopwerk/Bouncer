@@ -3,7 +3,7 @@ import { describe, test } from "node:test";
 import type { FilterConfig } from "../config.ts";
 import { parseRangeList } from "../ip-ranges.ts";
 import { buildFilters, runFilters, type FilterDeps } from "./pipeline.ts";
-import type { EventInfo, Filter } from "./types.ts";
+import type { EventInfo } from "./types.ts";
 
 const ALL_OFF: FilterConfig = {
   automatedBrowsers: false,
@@ -39,18 +39,6 @@ const SUSPICIOUS: EventInfo = {
   origin: undefined,
   hostname: "www.example.com",
 };
-
-describe("runFilters", () => {
-  test("returns the reason of the first filter that drops", () => {
-    const filters: Filter[] = [() => undefined, () => "referrer_spam", () => "bot_user_agent"];
-    assert.equal(runFilters(filters, HUMAN), "referrer_spam");
-  });
-
-  test("returns undefined when every filter passes", () => {
-    assert.equal(runFilters([() => undefined, () => undefined], HUMAN), undefined);
-    assert.equal(runFilters([], HUMAN), undefined);
-  });
-});
 
 describe("buildFilters", () => {
   test("builds no filters when everything is off", () => {

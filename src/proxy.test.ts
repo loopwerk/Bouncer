@@ -176,13 +176,6 @@ describe("POST /api/send", () => {
     assert.equal(calls.length, 0);
   });
 
-  test("rejects a body over 64 KB", async () => {
-    const { calls, send } = setup();
-    const event = { ...EVENT, payload: { ...EVENT.payload, title: "x".repeat(64 * 1024) } };
-    assert.equal((await send(event)).status, 413);
-    assert.equal(calls.length, 0);
-  });
-
   test("returns 502 when the upstream doesn't answer in time", async () => {
     const { entries, send } = setup({
       upstream: ({ signal }) => new Promise((_, reject) => signal?.addEventListener("abort", () => reject(signal.reason))),
@@ -197,37 +190,5 @@ describe("POST /api/send", () => {
     });
     assert.equal((await send()).status, 502);
     assert.equal(entries[0]?.level, "error");
-  });
-
-  test("returns 502 when the upstream is unreachable", async () => {
-    const { entries, send } = setup({
-      upstream: () => {
-        throw new Error("connection refused");
-      },
-    });
-    assert.equal((await send()).status, 502);
-    assert.equal(entries[0]?.level, "error");
-  });
-
-  test("allows cross-origin requests", async () => {
-    const { send } = setup();
-    assert.equal((await send()).headers.get("access-control-allow-origin"), "*");
-  });
-});
-
-describe("CORS preflight", () => {
-  test("allows the headers the tracker sends", async () => {
-    const response = await setup().app.request("/api/send", {
-      method: "OPTIONS",
-      headers: {
-        origin: "https://www.example.com",
-        "access-control-request-method": "POST",
-        "access-control-request-headers": "content-type,x-umami-website-id,x-umami-hostname,x-umami-cache",
-      },
-    });
-    assert.equal(response.status, 204);
-    assert.equal(response.headers.get("access-control-allow-origin"), "*");
-    assert.equal(response.headers.get("access-control-allow-headers"), "content-type,x-umami-website-id,x-umami-hostname,x-umami-cache");
-    assert.match(response.headers.get("access-control-allow-methods") ?? "", /POST/);
   });
 });

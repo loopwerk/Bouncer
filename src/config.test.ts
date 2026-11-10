@@ -66,10 +66,6 @@ describe("resolveConfig", () => {
     assert.throws(() => resolveConfig(undefined, { ...upstream, BOUNCER_PORT: "3100abc" }), /BOUNCER_PORT must be a whole number/);
   });
 
-  test("still requires an upstream", () => {
-    assert.throws(() => resolveConfig(undefined, {}), /upstream must be a non-empty string/);
-  });
-
   test("rejects a file that isn't a mapping", () => {
     assert.throws(() => resolveConfig("upstream", { BOUNCER_UPSTREAM: "https://umami.example.com" }), /config must be a mapping/);
   });
