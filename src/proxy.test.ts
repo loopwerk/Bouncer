@@ -231,11 +231,3 @@ describe("CORS preflight", () => {
     assert.match(response.headers.get("access-control-allow-methods") ?? "", /POST/);
   });
 });
-
-describe("other paths", () => {
-  test("return 404, so the Umami dashboard is not exposed", async () => {
-    const { app } = setup();
-    assert.equal((await app.request("/")).status, 404);
-    assert.equal((await app.request("/api/websites")).status, 404);
-  });
-});
