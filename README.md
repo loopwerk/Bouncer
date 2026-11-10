@@ -8,21 +8,21 @@ Adding Bouncer is a simple hostname swap. Wherever your site points at Umami tod
 
 Each event goes through these filters in order. The first one that matches drops the event.
 
-| Setting              | Drops the event when                                                                                                 |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `automated_browsers` | the browser is controlled by automation tools, such as Selenium, Playwright or Puppeteer                             |
-| `ua_bot_detection`   | `isbot` or Matomo's [device-detector](https://github.com/matomo-org/device-detector) bot list matches the user agent |
-| `datacenter_ips`     | the visitor IP belongs to a hosting provider                                                                         |
-| `vpn_ips`            | the visitor IP belongs to a VPN provider (this includes iCloud Private Relay users)                                  |
-| `referrer_spam`      | the referrer's domain, or a parent domain, is on Matomo's referrer spam list                                         |
-| `header_anomalies`   | the request has no `User-Agent` or no `Accept-Language` header                                                       |
-| `origin_mismatch`    | the request has no `Origin` header, or its host differs from the page's hostname in the event                        |
+| Setting              | Drops the event when                                                                          |
+| -------------------- | --------------------------------------------------------------------------------------------- |
+| `automated_browsers` | the browser is controlled by automation tools, such as Selenium, Playwright or Puppeteer      |
+| `ua_bot_detection`   | the browser's user agents belongs to a bot                                                    |
+| `datacenter_ips`     | the visitor IP belongs to a hosting provider                                                  |
+| `vpn_ips`            | the visitor IP belongs to a VPN provider (this includes iCloud Private Relay users)           |
+| `referrer_spam`      | the referrer's domain, or a parent domain, is on a spam list                                  |
+| `header_anomalies`   | the request has no `User-Agent` or no `Accept-Language` header                                |
+| `origin_mismatch`    | the request has no `Origin` header, or its host differs from the page's hostname in the event |
 
 ## Setup
 
-Bouncer supports Umami v2.17.0 and later.
+Bouncer supports Umami v2.17.0 and later, and is offered as a [Docker image on ghcr.io](https://ghcr.io/loopwerk/bouncer).
 
-If you build Umami yourself, leave `COLLECT_API_HOST` and `COLLECT_API_ENDPOINT` unset. They're built into Umami's tracker and make it send events somewhere other than Bouncer's `/api/send`.
+If you build Umami yourself, leave `COLLECT_API_HOST` and `COLLECT_API_ENDPOINT` unset. They're baked into the tracker script, so visitors' browsers would send events to a different host or path and skip Bouncer's filters.
 
 ### Configuration
 
