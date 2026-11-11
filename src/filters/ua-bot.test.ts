@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import { isbot } from "isbot";
-import { createUaBotFilter, isBotUserAgent } from "./ua-bot.ts";
+import { USER_AGENT_CACHE_SIZE, createUaBotFilter, isBotUserAgent } from "./ua-bot.ts";
 
 const BROWSERS = [
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
@@ -36,5 +36,33 @@ describe("createUaBotFilter", () => {
   test("passes other user agents, and leaves a missing one to the header check", () => {
     assert.equal(filter(event("browser")), undefined);
     assert.equal(filter(event(undefined)), undefined);
+  });
+
+  test("checks each user agent once", () => {
+    const checked: string[] = [];
+    const cachingFilter = createUaBotFilter((userAgent) => {
+      checked.push(userAgent);
+      return userAgent === "bot";
+    });
+
+    for (let i = 0; i < 3; i++) {
+      assert.equal(cachingFilter(event("bot")), "bot_user_agent");
+      assert.equal(cachingFilter(event("browser")), undefined);
+    }
+    assert.deepEqual(checked, ["bot", "browser"]);
+  });
+
+  test("forgets the oldest user agent when the cache is full", () => {
+    const checked: string[] = [];
+    const cachingFilter = createUaBotFilter((userAgent) => {
+      checked.push(userAgent);
+      return false;
+    });
+
+    for (let i = 0; i <= USER_AGENT_CACHE_SIZE; i++) {
+      cachingFilter(event(`browser ${i}`));
+    }
+    cachingFilter(event("browser 0"));
+    assert.equal(checked.length, USER_AGENT_CACHE_SIZE + 2);
   });
 });

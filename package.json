@@ -7,6 +7,7 @@
   "type": "module",
   "scripts": {
     "dev": "node src/index.ts",
+    "bench": "node scripts/bench.ts",
     "test": "node --test 'src/**/*.test.ts'",
     "check": "eslint . && tsc",
     "format": "eslint --fix ."
@@ -23,7 +24,9 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/autocannon": "^7.12.7",
     "@types/node": "^26.6.6",
+    "autocannon": "^9.0.0",
     "eslint": "^10.14.0",
     "typescript": "6.0.3",
     "typescript-eslint": "^8.72.1"
