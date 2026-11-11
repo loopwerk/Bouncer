@@ -14,11 +14,11 @@
   },
   "packageManager": "pnpm@10.33.4",
   "dependencies": {
-    "@hono/node-server": "^2.1.6",
-    "hono": "^4.13.16",
+    "@hono/node-server": "^2.1.7",
+    "hono": "^4.13.18",
     "ipaddr.js": "^2.5.0",
-    "isbot": "^5.2.2",
-    "node-device-detector": "^2.2.7",
+    "isbot": "^5.2.3",
+    "node-device-detector": "^2.2.9",
     "yaml": "^2.9.1"
   },
   "devDependencies": {
@@ -29,6 +29,6 @@
     "autocannon": "^9.0.0",
     "eslint": "^10.14.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "^8.72.1"
+    "typescript-eslint": "^8.72.2"
   }
 }
