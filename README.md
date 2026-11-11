@@ -165,6 +165,12 @@ Drops include the IP and user agent, so you can see what's being filtered. Passe
 
 Drops and passes are logged at the `info` level. Set `log_level` to `warn` to log only problems, or `error` to log only failures.
 
+## Performance
+
+On a Hetzner CPX21 instance (3 shared AMD vCPUs), Bouncer handles about 2,000 page views per second from real visitors, and about 4,300 per second from bots. For comparison, a site with a million page views a day averages about 12 per second.
+
+A benchmark script is provided: `pnpm bench`.
+
 ## Development
 
 You need [pnpm](https://pnpm.io).
